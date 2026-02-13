@@ -1,16 +1,13 @@
-const bow = document.getElementById('bow');
-const bowContainer = document.getElementById('bowContainer');
+const arrow = document.getElementById('arrow');
 const dragHint = document.getElementById('dragHint');
 const balloonsContainer = document.getElementById('balloonsContainer');
 const messageDisplay = document.getElementById('messageDisplay');
-const tryAgainPopup = document.getElementById('tryAgainPopup');
 const winnerPopup = document.getElementById('winnerPopup');
-const continueBtn = document.getElementById('continueBtn');
 const emailForm = document.getElementById('emailForm');
 const prizeImage = document.getElementById('prizeImage');
 
 // Replace with your actual shampoo product image URL
-const SHAMPOO_IMAGE_URL = 'https://github.com/devansh59/Balloon-Pop-game/blob/main/02_MycoPet_Bugoff_V1-removebg-preview.png?raw=true';
+const SHAMPOO_IMAGE_URL = 'https://via.placeholder.com/150x200/007FFF/FFFFFF?text=FREE+Shampoo';
 
 // Replace with your Google Apps Script URL
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
@@ -25,9 +22,9 @@ let isShooting = false;
 
 const balloons = document.querySelectorAll('.balloon');
 
-// Drag & Release Events
-bow.addEventListener('mousedown', startDrag);
-bow.addEventListener('touchstart', startDrag, { passive: false });
+// Drag & Release Events (Arrow Only)
+arrow.addEventListener('mousedown', startDrag);
+arrow.addEventListener('touchstart', startDrag, { passive: false });
 
 document.addEventListener('mousemove', drag);
 document.addEventListener('touchmove', drag, { passive: false });
@@ -35,13 +32,11 @@ document.addEventListener('touchmove', drag, { passive: false });
 document.addEventListener('mouseup', endDrag);
 document.addEventListener('touchend', endDrag);
 
-continueBtn.addEventListener('click', closePopup);
-
 function startDrag(e) {
   if (isShooting) return;
   
   isDragging = true;
-  bow.classList.add('dragging');
+  arrow.classList.add('dragging');
   dragHint.classList.add('hidden');
   
   const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
@@ -64,7 +59,8 @@ function drag(e) {
   
   // Only allow dragging down (positive Y)
   if (currentY > 0) {
-    bow.style.transform = `translateY(${Math.min(currentY, 100)}px) rotate(${Math.min(currentY / 5, 15)}deg)`;
+    const dragAmount = Math.min(currentY, 100);
+    arrow.style.transform = `translateX(-50%) translateY(${dragAmount}px) rotate(90deg)`;
   }
 }
 
@@ -72,14 +68,14 @@ function endDrag(e) {
   if (!isDragging) return;
   
   isDragging = false;
-  bow.classList.remove('dragging');
+  arrow.classList.remove('dragging');
   
   // Check if dragged enough to shoot (at least 50px)
   if (currentY > 50) {
     shootArrow();
   } else {
-    // Reset bow position
-    bow.style.transform = '';
+    // Reset arrow position
+    arrow.style.transform = 'translateX(-50%) rotate(90deg)';
     dragHint.classList.remove('hidden');
   }
   
@@ -102,12 +98,12 @@ function shootArrow() {
     navigator.vibrate(100);
   }
   
-  // Animate bow shooting
-  bow.classList.add('shooting');
-  bow.style.transform = '';
+  // Animate arrow shooting
+  arrow.classList.add('shooting');
+  arrow.style.transform = 'translateX(-50%) rotate(90deg)';
   
   setTimeout(() => {
-    bow.classList.remove('shooting');
+    arrow.classList.remove('shooting');
     popBalloon(targetBalloon);
   }, 600);
 }
@@ -135,11 +131,14 @@ function popBalloon(balloon) {
         showWinnerPopup();
       }, 1800);
     } else {
-      // Try again
+      // Try again - just show message, no popup
       showTryAgainMessage();
       setTimeout(() => {
-        showTryAgainPopup();
-      }, 1200);
+        // Auto reset for next shot
+        messageDisplay.innerHTML = '';
+        isShooting = false;
+        dragHint.classList.remove('hidden');
+      }, 2000);
     }
   }, 400);
 }
@@ -154,83 +153,9 @@ function showTryAgainMessage() {
   }, 500);
 }
 
-function showTryAgainPopup() {
-  tryAgainPopup.classList.add('active');
-}
-
-function closePopup() {
-  tryAgainPopup.classList.remove('active');
-  messageDisplay.innerHTML = '';
-  isShooting = false;
-  dragHint.classList.remove('hidden');
-}
-
 function createFlyingPrize(balloon) {
   const rect = balloon.getBoundingClientRect();
   const prize = document.createElement('img');
   prize.src = SHAMPOO_IMAGE_URL;
   prize.style.position = 'fixed';
-  prize.style.left = rect.left + rect.width / 2 - 60 + 'px';
-  prize.style.top = rect.top + 'px';
-  prize.style.width = '120px';
-  prize.style.height = 'auto';
-  prize.style.zIndex = '9998';
-  prize.style.transition = 'all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
-  prize.style.filter = 'drop-shadow(0 10px 30px rgba(255, 217, 61, 0.6))';
-  
-  document.body.appendChild(prize);
-  
-  // Animate prize flying up and scaling
-  setTimeout(() => {
-    prize.style.transform = 'translateY(-150px) scale(1.8) rotate(720deg)';
-    prize.style.opacity = '1';
-  }, 50);
-  
-  // Remove after animation
-  setTimeout(() => {
-    prize.style.opacity = '0';
-    setTimeout(() => prize.remove(), 500);
-  }, 1500);
-}
-
-function showWinnerPopup() {
-  prizeImage.src = SHAMPOO_IMAGE_URL;
-  winnerPopup.classList.add('active');
-  
-  // Vibrate celebration
-  if (navigator.vibrate) {
-    navigator.vibrate([200, 100, 200, 100, 200]);
-  }
-}
-
-emailForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const email = document.getElementById('emailInput').value;
-  const name = document.getElementById('nameInput').value || '';
-  
-  // Log to Google Sheets
-  logToGoogleSheets(email, name);
-  
-  // Redirect to review link
-  window.location.href = REVIEW_LINK;
-});
-
-function logToGoogleSheets(email, name) {
-  fetch(GOOGLE_SHEET_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      timestamp: new Date().toLocaleString(),
-      email: email,
-      name: name,
-      reward: 'Free Shampoo',
-      game: 'Balloon Pop'
-    })
-  }).then(() => {
-    console.log('✅ Logged to Google Sheets');
-  }).catch(err => {
-    console.log('⚠️ Logging attempted');
-  });
-}
+  prize.style.left = rect.left + rect
