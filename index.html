@@ -33,38 +33,38 @@
         <span>🎈🧴✨</span>
       </h1>
       
-      <p class="subtitle">Click SHOOT to pop a balloon! 🏹</p>
+      <p class="subtitle">Tap the balloons to pop them! 🎈</p>
       
       <div class="game-section">
         <!-- Balloons Container -->
         <div class="balloons-container" id="balloonsContainer">
-          <div class="balloon" data-position="left" data-has-prize="false">
-            <div class="balloon-body" style="background: linear-gradient(135deg, #FF6B9D, #C44569);"></div>
+          <div class="balloon clickable" data-position="left" data-has-prize="false">
+            <div class="balloon-body" style="background: linear-gradient(135deg, #FF6B9D, #C44569);">
+              <div class="balloon-shine"></div>
+            </div>
             <div class="balloon-string"></div>
+            <div class="balloon-knot"></div>
           </div>
           
-          <div class="balloon" data-position="center" data-has-prize="true">
-            <div class="balloon-body" style="background: linear-gradient(135deg, #FFD93D, #F39C12);"></div>
+          <div class="balloon clickable" data-position="center" data-has-prize="true">
+            <div class="balloon-body" style="background: linear-gradient(135deg, #FFD93D, #F39C12);">
+              <div class="balloon-shine"></div>
+            </div>
             <div class="balloon-string"></div>
+            <div class="balloon-knot"></div>
           </div>
           
-          <div class="balloon" data-position="right" data-has-prize="false">
-            <div class="balloon-body" style="background: linear-gradient(135deg, #6BCF7F, #4CAF50);"></div>
+          <div class="balloon clickable" data-position="right" data-has-prize="false">
+            <div class="balloon-body" style="background: linear-gradient(135deg, #6BCF7F, #4CAF50);">
+              <div class="balloon-shine"></div>
+            </div>
             <div class="balloon-string"></div>
+            <div class="balloon-knot"></div>
           </div>
         </div>
         
-        <!-- Arrow (Hidden initially, flies when shooting) -->
-        <div class="arrow" id="arrow">➤</div>
-        
         <!-- Message Display -->
         <div class="message-display" id="messageDisplay"></div>
-        
-        <!-- Round Shoot Button -->
-        <button class="shoot-btn" id="shootBtn">
-          <span class="btn-icon">🏹</span>
-          <span class="btn-text">SHOOT</span>
-        </button>
       </div>
       
       <footer>Powered by <strong>Myco Pet</strong> – Unleash Vitality ❤️</footer>
