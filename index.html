@@ -33,7 +33,7 @@
         <span>🎈🧴✨</span>
       </h1>
       
-      <p class="subtitle">Drag the arrow down & release to shoot! 🏹</p>
+      <p class="subtitle">Click SHOOT to pop a balloon! 🏹</p>
       
       <div class="game-section">
         <!-- Balloons Container -->
@@ -54,15 +54,17 @@
           </div>
         </div>
         
+        <!-- Arrow (Hidden initially, flies when shooting) -->
+        <div class="arrow" id="arrow">➤</div>
+        
         <!-- Message Display -->
         <div class="message-display" id="messageDisplay"></div>
         
-        <!-- Bow & Arrow (Separate) -->
-        <div class="bow-arrow-container">
-          <div class="bow-static">🏹</div>
-          <div class="arrow" id="arrow">➤</div>
-          <div class="drag-hint" id="dragHint">👇 Drag Arrow & Release 👇</div>
-        </div>
+        <!-- Round Shoot Button -->
+        <button class="shoot-btn" id="shootBtn">
+          <span class="btn-icon">🏹</span>
+          <span class="btn-text">SHOOT</span>
+        </button>
       </div>
       
       <footer>Powered by <strong>Myco Pet</strong> – Unleash Vitality ❤️</footer>
