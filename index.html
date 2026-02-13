@@ -33,7 +33,7 @@
         <span>🎈🧴✨</span>
       </h1>
       
-      <p class="subtitle">Shoot the balloons one by one - Your FREE gift is waiting! 🏹</p>
+      <p class="subtitle">Drag the bow down & release to shoot! 🏹</p>
       
       <div class="game-section">
         <!-- Balloons Container -->
@@ -57,15 +57,11 @@
         <!-- Message Display -->
         <div class="message-display" id="messageDisplay"></div>
         
-        <!-- Bow & Arrow -->
+        <!-- Bow & Arrow (Draggable) -->
         <div class="bow-container" id="bowContainer">
-          <div class="bow">🏹</div>
+          <div class="bow" id="bow">🏹</div>
+          <div class="drag-hint" id="dragHint">👇 Drag & Release 👇</div>
         </div>
-        
-        <!-- Shoot Button -->
-        <button class="shoot-btn" id="shootBtn">
-          <span class="btn-text">🎯 SHOOT!</span>
-        </button>
       </div>
       
       <footer>Powered by <strong>Myco Pet</strong> – Unleash Vitality ❤️</footer>
@@ -78,7 +74,7 @@
       <div class="popup-icon">😅</div>
       <h2>Oops! Try Again!</h2>
       <p>This balloon was empty. Keep shooting! 🎯</p>
-      <button class="continue-btn" id="continueBtn">🏹 Shoot Next Balloon</button>
+      <button class="continue-btn" id="continueBtn">🏹 Continue</button>
     </div>
   </div>
   
