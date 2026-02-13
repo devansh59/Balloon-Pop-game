@@ -1,11 +1,13 @@
 const shootBtn = document.getElementById('shootBtn');
 const bowContainer = document.getElementById('bowContainer');
+const bow = document.querySelector('.bow');
 const balloonsContainer = document.getElementById('balloonsContainer');
-const popupOverlay = document.getElementById('popupOverlay');
+const messageDisplay = document.getElementById('messageDisplay');
+const tryAgainPopup = document.getElementById('tryAgainPopup');
+const winnerPopup = document.getElementById('winnerPopup');
+const continueBtn = document.getElementById('continueBtn');
 const emailForm = document.getElementById('emailForm');
 const prizeImage = document.getElementById('prizeImage');
-
-let hasShot = false;
 
 // Replace with your actual shampoo product image URL
 const SHAMPOO_IMAGE_URL = 'https://github.com/devansh59/Balloon-Pop-game/blob/main/02_MycoPet_Bugoff_V1-removebg-preview.png?raw=true';
@@ -16,17 +18,29 @@ const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
 // Judge.me review link
 const REVIEW_LINK = 'https://judge.me/product_reviews/dd28df9e-62e6-48ae-9376-c804cb54521a/new?id=8062426284193&source=shareable-link';
 
+let currentBalloonIndex = 0;
+let isShooting = false;
+
+const balloons = document.querySelectorAll('.balloon');
+
 shootBtn.addEventListener('click', shootArrow);
+continueBtn.addEventListener('click', closePopup);
 
 function shootArrow() {
-  if (hasShot) return;
-  hasShot = true;
+  if (isShooting) return;
   
-  shootBtn.classList.add('shooting');
-  shootBtn.innerHTML = '<span class="btn-text">🎯 Shooting...</span>';
+  // Find next available balloon
+  const availableBalloons = Array.from(balloons).filter(b => !b.classList.contains('popped'));
+  if (availableBalloons.length === 0) return;
   
-  // Play shooting sound
-  playSound('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3', 0.5);
+  const targetBalloon = availableBalloons[0];
+  
+  isShooting = true;
+  shootBtn.disabled = true;
+  shootBtn.innerHTML = '<span class="btn-text">🏹 Shooting...</span>';
+  
+  // Play bow release sound (archery sound)
+  playSound('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', 0.6);
   
   // Vibrate
   if (navigator.vibrate) {
@@ -34,26 +48,20 @@ function shootArrow() {
   }
   
   // Animate bow shooting
-  bowContainer.style.transition = 'transform 0.5s';
-  bowContainer.style.transform = 'translateY(-20px) rotate(-10deg)';
+  bow.classList.add('shooting');
   
   setTimeout(() => {
-    bowContainer.style.transform = 'translateY(0) rotate(0deg)';
-  }, 500);
-  
-  // Target the center balloon (guaranteed win)
-  const centerBalloon = document.querySelector('.balloon.guaranteed');
-  
-  setTimeout(() => {
-    popBalloon(centerBalloon);
+    bow.classList.remove('shooting');
+    popBalloon(targetBalloon);
   }, 600);
 }
 
 function popBalloon(balloon) {
   const balloonBody = balloon.querySelector('.balloon-body');
+  const hasPrize = balloon.dataset.hasPrize === 'true';
   
-  // Play pop sound
-  playSound('https://assets.mixkit.co/active_storage/sfx/1996/1996-preview.mp3', 0.7);
+  // Play balloon pop sound
+  playSound('https://assets.mixkit.co/active_storage/sfx/1723/1723-preview.mp3', 0.7);
   
   // Vibrate
   if (navigator.vibrate) {
@@ -61,19 +69,49 @@ function popBalloon(balloon) {
   }
   
   // Pop animation
-  balloonBody.style.transition = 'all 0.3s';
+  balloon.classList.add('popped');
+  balloonBody.style.transition = 'all 0.4s';
   balloonBody.style.transform = 'scale(0)';
   balloonBody.style.opacity = '0';
   
-  // Create shampoo image flying out
   setTimeout(() => {
-    createFlyingPrize(balloon);
-  }, 300);
+    if (hasPrize) {
+      // Winner!
+      createFlyingPrize(balloon);
+      setTimeout(() => {
+        showWinnerPopup();
+      }, 1800);
+    } else {
+      // Try again
+      showTryAgainMessage();
+      setTimeout(() => {
+        showTryAgainPopup();
+      }, 1200);
+    }
+  }, 400);
+}
+
+function showTryAgainMessage() {
+  messageDisplay.innerHTML = '😅 Oops! Try Again!';
+  messageDisplay.style.color = '#C44569';
+  messageDisplay.style.animation = 'shake 0.5s';
   
-  // Show popup after animation
   setTimeout(() => {
-    showPopup();
-  }, 1500);
+    messageDisplay.style.animation = '';
+  }, 500);
+}
+
+function showTryAgainPopup() {
+  tryAgainPopup.classList.add('active');
+  playSound('https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3', 0.5);
+}
+
+function closePopup() {
+  tryAgainPopup.classList.remove('active');
+  messageDisplay.innerHTML = '';
+  isShooting = false;
+  shootBtn.disabled = false;
+  shootBtn.innerHTML = '<span class="btn-text">🎯 SHOOT!</span>';
 }
 
 function createFlyingPrize(balloon) {
@@ -81,34 +119,40 @@ function createFlyingPrize(balloon) {
   const prize = document.createElement('img');
   prize.src = SHAMPOO_IMAGE_URL;
   prize.style.position = 'fixed';
-  prize.style.left = rect.left + rect.width / 2 - 50 + 'px';
+  prize.style.left = rect.left + rect.width / 2 - 60 + 'px';
   prize.style.top = rect.top + 'px';
-  prize.style.width = '100px';
+  prize.style.width = '120px';
   prize.style.height = 'auto';
   prize.style.zIndex = '9998';
-  prize.style.transition = 'all 1s ease-out';
-  prize.style.filter = 'drop-shadow(0 10px 20px rgba(0, 127, 255, 0.5))';
+  prize.style.transition = 'all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  prize.style.filter = 'drop-shadow(0 10px 30px rgba(255, 217, 61, 0.6))';
   
   document.body.appendChild(prize);
   
   // Animate prize flying up and scaling
   setTimeout(() => {
-    prize.style.transform = 'translateY(-100px) scale(1.5) rotate(360deg)';
+    prize.style.transform = 'translateY(-150px) scale(1.8) rotate(720deg)';
     prize.style.opacity = '1';
   }, 50);
   
   // Remove after animation
   setTimeout(() => {
-    prize.remove();
+    prize.style.opacity = '0';
+    setTimeout(() => prize.remove(), 500);
   }, 1500);
 }
 
-function showPopup() {
+function showWinnerPopup() {
   prizeImage.src = SHAMPOO_IMAGE_URL;
-  popupOverlay.classList.add('active');
+  winnerPopup.classList.add('active');
   
-  // Play celebration sound
-  playSound('https://assets.mixkit.co/active_storage/sfx/1999/1999-preview.mp3', 0.8);
+  // Play victory fanfare
+  playSound('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3', 0.8);
+  
+  // Vibrate celebration
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 100, 200, 100, 200]);
+  }
 }
 
 emailForm.addEventListener('submit', function(e) {
