@@ -1,5 +1,3 @@
-const shootBtn = document.getElementById('shootBtn');
-const arrow = document.getElementById('arrow');
 const balloonsContainer = document.getElementById('balloonsContainer');
 const messageDisplay = document.getElementById('messageDisplay');
 const winnerPopup = document.getElementById('winnerPopup');
@@ -15,54 +13,28 @@ const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
 // Judge.me review link
 const REVIEW_LINK = 'https://judge.me/product_reviews/dd28df9e-62e6-48ae-9376-c804cb54521a/new?id=8062426284193&source=shareable-link';
 
-let isShooting = false;
-
 const balloons = document.querySelectorAll('.balloon');
 
-shootBtn.addEventListener('click', shootArrow);
-
-function shootArrow() {
-  if (isShooting) return;
-  
-  // Find next available balloon
-  const availableBalloons = Array.from(balloons).filter(b => !b.classList.contains('popped'));
-  if (availableBalloons.length === 0) return;
-  
-  const targetBalloon = availableBalloons[0];
-  
-  isShooting = true;
-  shootBtn.disabled = true;
-  
-  // Vibrate
-  if (navigator.vibrate) {
-    navigator.vibrate(50);
-  }
-  
-  // Show and animate arrow flying
-  arrow.classList.add('flying');
-  arrow.style.opacity = '1';
-  
-  setTimeout(() => {
-    arrow.classList.remove('flying');
-    arrow.style.opacity = '0';
-    popBalloon(targetBalloon);
-  }, 800);
-}
+// Add click event to each balloon
+balloons.forEach(balloon => {
+  balloon.addEventListener('click', function() {
+    if (this.classList.contains('popped')) return;
+    popBalloon(this);
+  });
+});
 
 function popBalloon(balloon) {
-  const balloonBody = balloon.querySelector('.balloon-body');
   const hasPrize = balloon.dataset.hasPrize === 'true';
+  
+  // Mark as popped
+  balloon.classList.add('popped');
+  balloon.classList.add('popping');
+  balloon.classList.remove('clickable');
   
   // Vibrate
   if (navigator.vibrate) {
     navigator.vibrate([100, 50, 100]);
   }
-  
-  // Pop animation
-  balloon.classList.add('popped');
-  balloonBody.style.transition = 'all 0.4s';
-  balloonBody.style.transform = 'scale(0)';
-  balloonBody.style.opacity = '0';
   
   setTimeout(() => {
     if (hasPrize) {
@@ -70,14 +42,12 @@ function popBalloon(balloon) {
       createFlyingPrize(balloon);
       setTimeout(() => {
         showWinnerPopup();
-      }, 1800);
+      }, 1500);
     } else {
-      // Try again - just show message
+      // Try again
       showTryAgainMessage();
       setTimeout(() => {
         messageDisplay.innerHTML = '';
-        isShooting = false;
-        shootBtn.disabled = false;
       }, 2000);
     }
   }, 400);
@@ -108,7 +78,7 @@ function createFlyingPrize(balloon) {
   
   document.body.appendChild(prize);
   
-  // Animate prize flying up and scaling
+  // Animate prize flying up
   setTimeout(() => {
     prize.style.transform = 'translateY(-150px) scale(1.8) rotate(720deg)';
     prize.style.opacity = '1';
