@@ -4,7 +4,7 @@ const winnerPopup = document.getElementById('winnerPopup');
 const emailForm = document.getElementById('emailForm');
 const prizeImage = document.getElementById('prizeImage');
 
-// Replace with your actual shampoo product image URL
+// Shampoo image URL
 const SHAMPOO_IMAGE_URL = 'https://github.com/devansh59/Balloon-Pop-game/blob/main/02_MycoPet_Bugoff_V1-removebg-preview.png?raw=true';
 
 // Replace with your Google Apps Script URL
@@ -25,16 +25,28 @@ balloons.forEach(balloon => {
 
 function popBalloon(balloon) {
   const hasPrize = balloon.dataset.hasPrize === 'true';
+  const balloonColor = balloon.dataset.color;
   
   // Mark as popped
   balloon.classList.add('popped');
-  balloon.classList.add('popping');
   balloon.classList.remove('clickable');
+  
+  // Play pop sound
+  playPopSound();
   
   // Vibrate
   if (navigator.vibrate) {
     navigator.vibrate([100, 50, 100]);
   }
+  
+  // Create explosion particles
+  createPopExplosion(balloon, balloonColor);
+  
+  // Hide balloon
+  const balloonBody = balloon.querySelector('.balloon-body');
+  balloonBody.style.transition = 'all 0.2s';
+  balloonBody.style.transform = 'scale(0)';
+  balloonBody.style.opacity = '0';
   
   setTimeout(() => {
     if (hasPrize) {
@@ -50,7 +62,42 @@ function popBalloon(balloon) {
         messageDisplay.innerHTML = '';
       }, 2000);
     }
-  }, 400);
+  }, 300);
+}
+
+function createPopExplosion(balloon, color) {
+  const rect = balloon.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  
+  // Create 20 particles
+  for (let i = 0; i < 20; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'pop-particle';
+    particle.style.background = color;
+    particle.style.left = centerX + 'px';
+    particle.style.top = centerY + 'px';
+    
+    // Random direction
+    const angle = (Math.PI * 2 * i) / 20;
+    const velocity = 80 + Math.random() * 60;
+    const tx = Math.cos(angle) * velocity;
+    const ty = Math.sin(angle) * velocity;
+    
+    particle.style.setProperty('--tx', tx + 'px');
+    particle.style.setProperty('--ty', ty + 'px');
+    
+    document.body.appendChild(particle);
+    
+    // Remove after animation
+    setTimeout(() => particle.remove(), 800);
+  }
+}
+
+function playPopSound() {
+  const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2386/2386-preview.mp3');
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log('Pop sound failed:', err));
 }
 
 function showTryAgainMessage() {
