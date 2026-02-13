@@ -20,33 +20,42 @@
     <div class="container">
       <img src="https://raw.githubusercontent.com/devansh59/mycopet-images/main/NewLogo.png?v=10" alt="Myco Pet" class="logo">
       
+      <!-- Guaranteed Gift Badge at Top -->
+      <div class="guaranteed-top-badge">
+        <span class="badge-icon">🎁</span>
+        <span class="badge-text">100% GUARANTEED FREE GIFT!</span>
+        <span class="badge-icon">🎁</span>
+      </div>
+      
       <h1 class="title">
-        <span>🎯 Pop a Balloon &</span>
+        <span>🎯 Pop Balloons &</span>
         <span class="highlight">Win FREE Shampoo!</span>
         <span>🎈🧴✨</span>
       </h1>
       
-      <p class="subtitle">Tap SHOOT to pop a balloon - One has a FREE gift inside! 🎁</p>
+      <p class="subtitle">Shoot the balloons one by one - Your FREE gift is waiting! 🏹</p>
       
       <div class="game-section">
         <!-- Balloons Container -->
         <div class="balloons-container" id="balloonsContainer">
-          <div class="balloon" data-position="left">
+          <div class="balloon" data-position="left" data-has-prize="false">
             <div class="balloon-body" style="background: linear-gradient(135deg, #FF6B9D, #C44569);"></div>
             <div class="balloon-string"></div>
           </div>
           
-          <div class="balloon guaranteed" data-position="center">
-            <div class="guaranteed-badge">🎁 GUARANTEED</div>
+          <div class="balloon" data-position="center" data-has-prize="true">
             <div class="balloon-body" style="background: linear-gradient(135deg, #FFD93D, #F39C12);"></div>
             <div class="balloon-string"></div>
           </div>
           
-          <div class="balloon" data-position="right">
+          <div class="balloon" data-position="right" data-has-prize="false">
             <div class="balloon-body" style="background: linear-gradient(135deg, #6BCF7F, #4CAF50);"></div>
             <div class="balloon-string"></div>
           </div>
         </div>
+        
+        <!-- Message Display -->
+        <div class="message-display" id="messageDisplay"></div>
         
         <!-- Bow & Arrow -->
         <div class="bow-container" id="bowContainer">
@@ -63,23 +72,35 @@
     </div>
   </div>
   
-  <!-- Email Popup (Hidden Initially) -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup">
+  <!-- Try Again Popup -->
+  <div class="popup-overlay" id="tryAgainPopup">
+    <div class="popup try-again">
+      <div class="popup-icon">😅</div>
+      <h2>Oops! Try Again!</h2>
+      <p>This balloon was empty. Keep shooting! 🎯</p>
+      <button class="continue-btn" id="continueBtn">🏹 Shoot Next Balloon</button>
+    </div>
+  </div>
+  
+  <!-- Winner Popup -->
+  <div class="popup-overlay" id="winnerPopup">
+    <div class="popup winner">
+      <div class="confetti-animation">🎉🎊✨🎁✨🎊🎉</div>
       <div class="popup-header">
-        <h2>🎉 You Won FREE Shampoo!</h2>
-        <img src="https://via.placeholder.com/150x200/007FFF/FFFFFF?text=Shampoo" alt="Free Shampoo" class="prize-image" id="prizeImage">
+        <h2>🎉 CONGRATULATIONS! 🎉</h2>
+        <img src="https://via.placeholder.com/150x200/007FFF/FFFFFF?text=FREE+Shampoo" alt="Free Shampoo" class="prize-image" id="prizeImage">
       </div>
       
-      <p class="popup-text">Enter your email to claim your prize:</p>
+      <p class="popup-text">You Won a <strong>FREE Shampoo!</strong> 🧴</p>
+      <p class="popup-subtext">Enter your email to claim your prize:</p>
       
       <form id="emailForm">
         <input type="email" id="emailInput" placeholder="your@email.com" required>
         <input type="text" id="nameInput" placeholder="Your Name (optional)">
-        <button type="submit" class="claim-btn">✅ Claim & Review</button>
+        <button type="submit" class="claim-btn">✅ Claim & Leave Review</button>
       </form>
       
-      <p class="popup-note">We'll send your gift code after you review! 💙</p>
+      <p class="popup-note">💙 We'll send your gift code after you review!</p>
     </div>
   </div>
   
