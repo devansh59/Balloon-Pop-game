@@ -5,7 +5,7 @@ const emailForm = document.getElementById('emailForm');
 const prizeImage = document.getElementById('prizeImage');
 
 // Replace with your actual shampoo product image URL
-const SHAMPOO_IMAGE_URL = 'https://via.placeholder.com/150x200/007FFF/FFFFFF?text=FREE+Shampoo';
+const SHAMPOO_IMAGE_URL = 'https://github.com/devansh59/Balloon-Pop-game/blob/main/02_MycoPet_Bugoff_V1-removebg-preview.png?raw=true';
 
 // Replace with your Google Apps Script URL
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
