@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Myco Pet Balloon Pop</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="floating-bg">
+    <span class="float">🍄</span>
+    <span class="float">🐾</span>
+    <span class="float">🍄</span>
+    <span class="float">🐾</span>
+    <span class="float">🍄</span>
+    <span class="float">🐾</span>
+  </div>
+  
+  <div class="page-wrapper">
+    <div class="container">
+      <img src="https://raw.githubusercontent.com/devansh59/mycopet-images/main/NewLogo.png?v=10" alt="Myco Pet" class="logo">
+      
+      <h1 class="title">
+        <span>🎯 Pop a Balloon &</span>
+        <span class="highlight">Win FREE Shampoo!</span>
+        <span>🎈🧴✨</span>
+      </h1>
+      
+      <p class="subtitle">Tap SHOOT to pop a balloon - One has a FREE gift inside! 🎁</p>
+      
+      <div class="game-section">
+        <!-- Balloons Container -->
+        <div class="balloons-container" id="balloonsContainer">
+          <div class="balloon" data-position="left">
+            <div class="balloon-body" style="background: linear-gradient(135deg, #FF6B9D, #C44569);"></div>
+            <div class="balloon-string"></div>
+          </div>
+          
+          <div class="balloon guaranteed" data-position="center">
+            <div class="guaranteed-badge">🎁 GUARANTEED</div>
+            <div class="balloon-body" style="background: linear-gradient(135deg, #FFD93D, #F39C12);"></div>
+            <div class="balloon-string"></div>
+          </div>
+          
+          <div class="balloon" data-position="right">
+            <div class="balloon-body" style="background: linear-gradient(135deg, #6BCF7F, #4CAF50);"></div>
+            <div class="balloon-string"></div>
+          </div>
+        </div>
+        
+        <!-- Bow & Arrow -->
+        <div class="bow-container" id="bowContainer">
+          <div class="bow">🏹</div>
+        </div>
+        
+        <!-- Shoot Button -->
+        <button class="shoot-btn" id="shootBtn">
+          <span class="btn-text">🎯 SHOOT!</span>
+        </button>
+      </div>
+      
+      <footer>Powered by <strong>Myco Pet</strong> – Unleash Vitality ❤️</footer>
+    </div>
+  </div>
+  
+  <!-- Email Popup (Hidden Initially) -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+      <div class="popup-header">
+        <h2>🎉 You Won FREE Shampoo!</h2>
+        <img src="https://via.placeholder.com/150x200/007FFF/FFFFFF?text=Shampoo" alt="Free Shampoo" class="prize-image" id="prizeImage">
+      </div>
+      
+      <p class="popup-text">Enter your email to claim your prize:</p>
+      
+      <form id="emailForm">
+        <input type="email" id="emailInput" placeholder="your@email.com" required>
+        <input type="text" id="nameInput" placeholder="Your Name (optional)">
+        <button type="submit" class="claim-btn">✅ Claim & Review</button>
+      </form>
+      
+      <p class="popup-note">We'll send your gift code after you review! 💙</p>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
