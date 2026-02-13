@@ -236,50 +236,74 @@ body {
   margin: 8px 0;
 }
 
-/* ===== BOW & ARROW (DRAGGABLE) ===== */
-.bow-container {
+/* ===== BOW & ARROW (SEPARATE) ===== */
+.bow-arrow-container {
   text-align: center;
   margin: 15px 0 10px;
   position: relative;
+  min-height: 120px;
 }
 
-.bow {
+.bow-static {
   font-size: 4rem;
   display: inline-block;
-  cursor: grab;
   filter: drop-shadow(0 4px 10px rgba(0, 127, 255, 0.3));
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.arrow {
+  font-size: 3rem;
+  display: inline-block;
+  cursor: grab;
+  filter: drop-shadow(0 4px 10px rgba(255, 107, 157, 0.4));
   transition: all 0.2s;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%) rotate(90deg);
+  color: #C44569;
+  z-index: 10;
 }
 
-.bow:active {
+.arrow:active {
   cursor: grabbing;
 }
 
-.bow.dragging {
+.arrow.dragging {
   cursor: grabbing;
-  transform: scale(1.1);
-  filter: drop-shadow(0 6px 15px rgba(255, 107, 157, 0.5));
+  transform: translateX(-50%) rotate(90deg) scale(1.2);
+  filter: drop-shadow(0 6px 15px rgba(255, 107, 157, 0.6));
 }
 
-.bow.shooting {
-  animation: bowShoot 0.6s;
+.arrow.shooting {
+  animation: arrowShoot 0.6s;
 }
 
-@keyframes bowShoot {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-30px) scale(1.2) rotate(-10deg); }
-  100% { transform: translateY(0) scale(1) rotate(0deg); }
+@keyframes arrowShoot {
+  0% { transform: translateX(-50%) translateY(0) rotate(90deg) scale(1); opacity: 1; }
+  50% { transform: translateX(-50%) translateY(-200px) rotate(90deg) scale(0.8); opacity: 0.5; }
+  100% { transform: translateX(-50%) translateY(0) rotate(90deg) scale(1); opacity: 1; }
 }
 
 .drag-hint {
   font-size: 0.9rem;
   color: #007FFF;
   font-weight: 700;
-  margin-top: 8px;
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
   animation: bounce 2s infinite;
+  white-space: nowrap;
 }
 
 .drag-hint.hidden {
@@ -333,57 +357,6 @@ footer strong {
   0% { transform: scale(0.5) rotate(-5deg); opacity: 0; }
   50% { transform: scale(1.05) rotate(2deg); }
   100% { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-
-/* Try Again Popup */
-.popup.try-again {
-  border: 4px solid #FF6B9D;
-}
-
-.popup-icon {
-  font-size: 4rem;
-  margin-bottom: 15px;
-  animation: shake 0.5s;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px) rotate(-5deg); }
-  75% { transform: translateX(10px) rotate(5deg); }
-}
-
-.popup.try-again h2 {
-  color: #C44569;
-  font-size: 1.6rem;
-  margin-bottom: 12px;
-}
-
-.popup.try-again p {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.continue-btn {
-  padding: 15px 35px;
-  background: linear-gradient(135deg, #007FFF, #005099);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 8px 20px rgba(0, 127, 255, 0.4);
-}
-
-.continue-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 127, 255, 0.5);
-}
-
-.continue-btn:active {
-  transform: scale(0.98);
 }
 
 /* Winner Popup */
@@ -502,12 +475,19 @@ footer strong {
   50% { opacity: 0.9; transform: scale(1.05); }
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 360px) {
   .logo { height: 70px; }
   .guaranteed-top-badge { font-size: 0.65rem; padding: 6px 15px; }
   .balloon-body { width: 60px; height: 80px; }
-  .bow { font-size: 3.5rem; }
+  .bow-static { font-size: 3.5rem; }
+  .arrow { font-size: 2.5rem; }
   .drag-hint { font-size: 0.8rem; }
 }
 
@@ -515,7 +495,8 @@ footer strong {
   .logo { height: 100px; max-width: 140px; }
   .guaranteed-top-badge { font-size: 0.9rem; padding: 10px 25px; }
   .balloon-body { width: 90px; height: 110px; }
-  .bow { font-size: 5rem; }
+  .bow-static { font-size: 5rem; }
+  .arrow { font-size: 3.5rem; }
   .drag-hint { font-size: 1rem; }
   .game-section { padding: 25px 20px; }
 }
@@ -523,5 +504,6 @@ footer strong {
 @media (min-width: 1024px) {
   .container { max-width: 800px; }
   .balloon-body { width: 100px; height: 120px; }
-  .bow { font-size: 5.5rem; }
+  .bow-static { font-size: 5.5rem; }
+  .arrow { font-size: 4rem; }
 }
